@@ -76,3 +76,6 @@ target/
 
 # SQLite databases
 *.sqlite3
+
+# conversation app migrations
+Conversation/migrations/
