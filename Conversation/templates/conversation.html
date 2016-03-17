@@ -1,0 +1,62 @@
+{% extends "basepage.html" %}
+{% block title %}Conversation {{ conversation.id }}{% endblock %}
+{% block content %}
+    <div class="panel panel-white post panel-shadow">
+        <div class="post-heading">
+            <div class="pull-left image">
+                <img src="{{ root_tweet.profile_image_url }}" class="img-circle avatar" alt="user profile image">
+            </div>
+            <div class="pull-left meta">
+                <div class="title h5">
+                    <a href="#"><b>{{ root_tweet.display_name }}</b></a>
+                    @{{ root_tweet.username }}
+                </div>
+                <h6 class="text-muted time">Importado el: {{ root_tweet.created_at }}</h6>
+            </div>
+        </div>
+        <div class="post-description">
+            <p>{{ root_tweet.text }}</p>
+            <div class="stats">
+                <button type="button" class="btn btn-default stat-item">
+                    <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+                    {{ root_tweet.retweet_count }}
+                </button>
+                <button type="button" class="btn btn-default stat-item">
+                    <span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+                    {{ root_tweet.favourites_count }}
+                </button>
+            </div>
+        </div>
+        <div class="post-footer">
+            {% if replies %}
+                <ul class="comments-list">
+                    {% for comment in replies %} {# tweet, new_ul|close_li, close_n_ul_li #}
+                        <li class="comment">
+                            <a class="pull-left" href="#">
+                                <img class="avatar" src="{{ comment.0.profile_image_url }}" alt="avatar">
+                            </a>
+                            <div class="comment-body">
+                                <div class="comment-heading">
+                                    <h4 class="user"><a href="#"><b>{{ comment.0.display_name }}</b></a>
+                                        @{{ comment.0.username }}</h4>
+                                    {# <h5 class="time">{{ comment.0.created_at }}</h5> #}
+                                </div>
+                                <p>{{ comment.0.text }}</p>
+                            </div>
+                        {% if comment.1 == 1 %}
+                            <ul class="comments-list">
+                        {% else %}
+                            </li>
+                        {% endif %}
+                        {% for i in comment.2 %}
+                            </ul>
+                            </li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>This conversation has no replies!</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
