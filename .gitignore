@@ -73,3 +73,6 @@ target/
 
 # PyCharm directory
 .idea
+
+# SQLite databases
+*.sqlite3
