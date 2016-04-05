@@ -13,6 +13,7 @@ class Tweet(models.Model):
 	in_reply_to_status_id = models.ForeignKey("self", blank=True, null=True)
 	retweet_count = models.IntegerField()
 	favourites_count = models.IntegerField()
+	sentiment = models.IntegerField(default=0)
 
 	def __str__(self):
 		return str(self.id)
