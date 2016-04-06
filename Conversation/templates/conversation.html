@@ -59,6 +59,22 @@
                                         {# <h5 class="time">{{ comment.0.created_at }}</h5> #}
                                     </div>
                                     <p>{{ comment.0.text }}</p>
+                                    <form action="/conversation/{{ comment.0.id }}/sentiment/edit" method="post" class="form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="conversation_id" value="{{ root_tweet.id }}"/>
+                                        <div class="row">
+                                            <div class="col-xs-2">
+                                                <select name="sentiment" class="form-control input-sm">
+                                                    <option value="negative" {% if comment.0.sentiment < 0 %} selected {% endif %}>En contra</option>
+                                                    <option value="neutral" {% if comment.0.sentiment == 0 %} selected {% endif %}>Neutral</option>
+                                                    <option value="positive" {% if comment.0.sentiment > 0 %} selected {% endif %}>A favor</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-xs-2">
+                                                <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         {% if comment.1 == 1 %}

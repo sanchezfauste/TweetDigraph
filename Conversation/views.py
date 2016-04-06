@@ -1,9 +1,28 @@
 from django.shortcuts import render
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 
 from TwitterAPI.conversation import Conversation
 from TwitterAPI.twitter_api import Twitter
 from models import Tweet
+
+def update_sentiment(request, pk):
+	if request.method == 'POST':
+		if request.POST.get('sentiment') == 'negative':
+			sentiment = -1
+		elif request.POST.get('sentiment') == 'neutral':
+			sentiment = 0
+		else:
+			sentiment = 1
+		try:
+			tweet = Tweet.objects.get(pk=pk)
+			tweet.sentiment = sentiment
+			tweet.save()
+			conversation_id = request.POST.get('conversation_id', pk)
+			return HttpResponseRedirect("/conversation/" + conversation_id + "/show")
+		except:
+			raise Http404("This conversation does not exist")
+	else:
+		return HttpResponse("Unsupported method")
 
 def show(request, pk):
 	try:
