@@ -4,6 +4,9 @@ import requests
 from Conversation.models import Tweet
 from django.utils import timezone
 
+from Vibe.vibe import Vibe
+
+
 class Conversation:
 
 	def __init__(self, root_status_id, tweepy_api, verbose = False, save_on_load = False):
@@ -62,7 +65,9 @@ class ConversationNode:
 				created_at = timezone.now(),
 				text = self.status.text,
 				retweet_count = self.status.retweet_count,
-				favourites_count = self.status.favorite_count)
+				favourites_count = self.status.favorite_count,
+				lang = self.status.lang,
+				sentiment = Vibe(self.status.lang).get_sentiment(self.status.text))
 		try:
 			if self.status.in_reply_to_status_id:
 				tweet.in_reply_to_status_id = Tweet.objects.get(pk=self.status.in_reply_to_status_id)

@@ -14,6 +14,7 @@ class Tweet(models.Model):
 	retweet_count = models.IntegerField()
 	favourites_count = models.IntegerField()
 	sentiment = models.IntegerField(default=0)
+	lang = models.CharField(max_length=10)
 
 	def __str__(self):
 		return str(self.id)
