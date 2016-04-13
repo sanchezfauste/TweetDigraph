@@ -33,6 +33,21 @@ def show(request, pk):
 				  {'root_tweet':root_tweet,
 				  'replies':get_replies(root_tweet)})
 
+def graph(request, pk):
+	from django.core import serializers
+	try:
+		root_tweet = Tweet.objects.get(pk=pk)
+	except:
+		raise Http404("This Conversation does not exist")
+	stack = [root_tweet]
+	conversation = []
+	while (len(stack)):
+		tweet = stack.pop()
+		conversation.append(tweet)
+		stack += Tweet.objects.all().filter(in_reply_to_status_id=tweet.id)
+	return render(request, 'conversation_digraph.html',
+				  {'conversation':conversation})
+
 def download(request, pk):
 	conversation = Conversation(pk, Twitter().api, save_on_load=True)
 	return HttpResponse("Imported!")

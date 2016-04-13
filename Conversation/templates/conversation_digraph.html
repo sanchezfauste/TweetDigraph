@@ -1,0 +1,26 @@
+{% extends "basepage.html" %}
+{% block title %}Conversation {{ conversation.id }}{% endblock %}
+{% block content %}
+    <script type="text/javascript">
+        var tweets = {};
+        var nodes = [],
+          lastNodeId = 0,
+          links = [];
+        {% for tweet in conversation %}
+            nodes.push({id: lastNodeId, reflexive: false, sentiment: {{ tweet.sentiment }}});
+            tweets[{{ tweet.id }}] = lastNodeId;
+            lastNodeId += 1;
+        {% endfor %}
+        {% for tweet in conversation %}
+            if ("{{ tweet.in_reply_to_status_id }}" != "None") {
+                links.push({source: nodes[tweets[{{ tweet.id }}]],
+                            target: nodes[tweets[{{ tweet.in_reply_to_status_id}}]],
+                            left: false, right: true})
+            }
+        {% endfor %}
+    </script>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static "digraph_editor/app.css" %}" />
+    <script type="text/javascript" src="{% static "digraph_editor/d3.v3.min.js" %}" ></script>
+    <script type="text/javascript" src="{% static "digraph_editor/app.js" %}" ></script>
+{% endblock %}
