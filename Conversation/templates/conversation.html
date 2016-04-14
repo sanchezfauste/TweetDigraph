@@ -1,6 +1,8 @@
 {% extends "basepage.html" %}
 {% block title %}Conversation {{ conversation.id }}{% endblock %}
 {% block content %}
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static "conversation.css" %}" />
     <div class="panel panel-white post panel-shadow">
         <div class="sentiment
             {% if root_tweet.sentiment < 0 %}
