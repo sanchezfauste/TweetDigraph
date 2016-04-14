@@ -3,8 +3,9 @@
 {% block content %}
     {% load staticfiles %}
     <link rel="stylesheet" href="{% static "conversation.css" %}" />
+    <script type="text/javascript" src="{% static "conversation.js" %}" ></script>
     <div class="panel panel-white post panel-shadow">
-        <div class="sentiment
+        <div id="comment_{{ root_tweet.id }}" class="sentiment
             {% if root_tweet.sentiment < 0 %}
                 sentiment-negative
             {% elif root_tweet.sentiment > 0 %}
@@ -27,14 +28,23 @@
             <div class="post-description">
                 <p>{{ root_tweet.text }}</p>
                 <div class="stats">
-                    <button type="button" class="btn btn-default stat-item">
+                    <span class="label label-default">
                         <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
-                        {{ root_tweet.retweet_count }}
-                    </button>
-                    <button type="button" class="btn btn-default stat-item">
-                        <span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
-                        {{ root_tweet.favourites_count }}
-                    </button>
+                        {{ root_tweet.retweet_count }}</span>
+                    <span class="label label-default">
+                        <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+                        {{ root_tweet.favourites_count }}</span>
+                    <p></p><form action="/conversation/{{ root_tweet.id }}/sentiment/edit" method="post" class="form-inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="conversation_id" value="{{ root_tweet.id }}"/>
+                        <select id="sentiment_{{ root_tweet.id }}" name="sentiment" class="form-control input-sm selectWidth"
+                                onClick="changeSentiment('sentiment_{{ root_tweet.id }}', 'comment_{{ root_tweet.id }}')">
+                            <option value="negative" {% if root_tweet.sentiment < 0 %} selected {% endif %}>En contra</option>
+                            <option value="neutral" {% if root_tweet.sentiment == 0 %} selected {% endif %}>Neutral</option>
+                            <option value="positive" {% if root_tweet.sentiment > 0 %} selected {% endif %}>A favor</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -43,7 +53,7 @@
                 <ul class="comments-list">
                     {% for comment in replies %} {# tweet, new_ul|close_li, close_n_ul_li #}
                         <li class="comment">
-                            <div class="sentiment
+                            <div id="comment_{{ comment.0.id }}" class="sentiment
                                 {% if comment.0.sentiment < 0 %}
                                     sentiment-negative
                                 {% elif comment.0.sentiment > 0 %}
@@ -61,21 +71,16 @@
                                         {# <h5 class="time">{{ comment.0.created_at }}</h5> #}
                                     </div>
                                     <p>{{ comment.0.text }}</p>
-                                    <form action="/conversation/{{ comment.0.id }}/sentiment/edit" method="post" class="form">
+                                    <form action="/conversation/{{ comment.0.id }}/sentiment/edit" method="post" class="form-inline">
                                         {% csrf_token %}
                                         <input type="hidden" name="conversation_id" value="{{ root_tweet.id }}"/>
-                                        <div class="row">
-                                            <div class="col-xs-2">
-                                                <select name="sentiment" class="form-control input-sm">
-                                                    <option value="negative" {% if comment.0.sentiment < 0 %} selected {% endif %}>En contra</option>
-                                                    <option value="neutral" {% if comment.0.sentiment == 0 %} selected {% endif %}>Neutral</option>
-                                                    <option value="positive" {% if comment.0.sentiment > 0 %} selected {% endif %}>A favor</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-xs-2">
-                                                <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
-                                            </div>
-                                        </div>
+                                        <select id="sentiment_{{ comment.0.id }}" name="sentiment" class="form-control input-sm selectWidth"
+                                                onClick="changeSentiment('sentiment_{{ comment.0.id }}', 'comment_{{ comment.0.id }}')">
+                                            <option value="negative" {% if comment.0.sentiment < 0 %} selected {% endif %}>En contra</option>
+                                            <option value="neutral" {% if comment.0.sentiment == 0 %} selected {% endif %}>Neutral</option>
+                                            <option value="positive" {% if comment.0.sentiment > 0 %} selected {% endif %}>A favor</option>
+                                        </select>
+                                        <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
                                     </form>
                                 </div>
                             </div>

@@ -130,3 +130,8 @@
 .sentiment-neutral {
   border-color: #dddddd;
 }
+
+.selectWidth {
+  width: auto;
+  display: inline;
+}
