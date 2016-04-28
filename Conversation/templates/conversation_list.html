@@ -1,0 +1,40 @@
+{% extends "basepage.html" %}
+{% block title %}Conversations{{ conversation.id }}{% endblock %}
+{% block content %}
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static "conversation.css" %}" />
+    <h1 class="page-header">Imported conversations</h1>
+    <div class="panel-white post panel-shadow">
+        <div class="post-footer">
+            {% if conversations %}
+                <ul class="comments-list">
+                    {% for conversation in conversations %} {# tweet, new_ul|close_li, close_n_ul_li #}
+                        <li class="comment">
+                            <div id="comment_{{ conversation.root_tweet.id }}" class="sentiment
+                                {% if conversation.root_tweet.sentiment < 0 %}
+                                    sentiment-negative
+                                {% elif conversation.root_tweet.sentiment > 0 %}
+                                    sentiment-positive
+                                {% else %}
+                                    sentiment-neutral
+                                {% endif%}">
+                                <a class="pull-left" href="#">
+                                    <img class="avatar" src="{{ conversation.root_tweet.profile_image_url }}" alt="avatar">
+                                </a>
+                                <div class="comment-body">
+                                    <div class="comment-heading">
+                                        <h4 class="user"><a href="/conversation/{{ conversation.root_tweet.id }}/show"><b>{{ conversation.root_tweet.display_name }}</b></a>
+                                            @{{ conversation.root_tweet.username }}</h4>
+                                        {# <h5 class="time">{{ comment.0.created_at }}</h5> #}
+                                    </div>
+                                    <p>{{ conversation.root_tweet.text }}</p>
+                                </div>
+                            </div>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Ther are no conversations!</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

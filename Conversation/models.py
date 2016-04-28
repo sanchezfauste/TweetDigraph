@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.contrib.auth.models import User
 
 class Tweet(models.Model):
 
@@ -18,3 +19,12 @@ class Tweet(models.Model):
 
 	def __str__(self):
 		return str(self.id)
+
+class UserConversation(models.Model):
+
+	root_tweet = models.ForeignKey(Tweet)
+	user = models.ForeignKey(User, default=1)
+	def __unicode__(self):
+		return str(self.root_tweet.id)
+	def get_absolute_url(self):
+		return "/conversation/" + str(self.root_tweet.id)

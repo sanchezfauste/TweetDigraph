@@ -3,7 +3,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 
 from TwitterAPI.conversation import Conversation
 from TwitterAPI.twitter_api import Twitter
-from models import Tweet
+from models import Tweet, UserConversation
 
 def update_sentiment(request, pk):
 	if request.method == 'POST':
@@ -50,6 +50,11 @@ def graph(request, pk):
 
 def download(request, pk):
 	conversation = Conversation(pk, Twitter().api, save_on_load=True)
+	user_conversation = UserConversation(
+		user = request.user,
+		root_tweet = Tweet.objects.get(pk = conversation.root_conv_node.status.id)
+	)
+	user_conversation.save()
 	return HttpResponse("Imported!")
 
 def get_conversation(root_tweet):
@@ -75,3 +80,8 @@ def get_replies(root_tweet):
 				1 if next_reply[1] > actual_reply[1] else 0,
 				range(actual_reply[1] - next_reply[1]) if actual_reply[1] - next_reply[1] > 0 else []))
 	return replies
+
+def show_conversation_list(request):
+	return render(request, 'conversation_list.html',
+				  {'conversations':UserConversation.objects.all(),
+				   'nvar':"conversation_list"})
