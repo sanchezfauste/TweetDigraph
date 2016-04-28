@@ -4,7 +4,7 @@
     {% load staticfiles %}
     <link rel="stylesheet" href="{% static "conversation.css" %}" />
     <script type="text/javascript" src="{% static "conversation.js" %}" ></script>
-    <div class="panel panel-white post panel-shadow">
+    <div class="panel-white post panel-shadow">
         <div id="comment_{{ root_tweet.id }}" class="sentiment
             {% if root_tweet.sentiment < 0 %}
                 sentiment-negative
