@@ -4,6 +4,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from TwitterAPI.conversation import Conversation
 from TwitterAPI.twitter_api import Twitter
 from models import Tweet, UserConversation
+from django.contrib.auth.decorators import login_required
 
 def update_sentiment(request, pk):
 	if request.method == 'POST':
@@ -49,6 +50,7 @@ def graph(request, pk):
 				  {'conversation':conversation,
 				   'user':request.user})
 
+@login_required
 def download(request, pk):
 	conversation = Conversation(pk, Twitter().api, save_on_load=True)
 	user_conversation = UserConversation(
