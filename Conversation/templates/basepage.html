@@ -19,8 +19,8 @@
 
     <title>{% block title %}TwiGraph - Conversation{% endblock %}</title>
 </head>
-<body role="document">
-    <nav class="navbar navbar-default navbar-fixed-top">
+<body role="document" onresize="resize()">
+    <nav class="navbar navbar-default navbar-fixed-top" id="nav">
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -59,7 +59,7 @@
       </div>
     </nav>
 
-    <div class="container" role="main">
+    <div class="container" role="main" id="container">
         {% block content %}{% endblock %}
     </div> <!-- /container -->
 </body>

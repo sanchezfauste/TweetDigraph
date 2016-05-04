@@ -1,13 +1,7 @@
 // set up SVG for D3
-var width  = 1024,
-    height = 768;
-    //colors = d3.scale.category10();
-
-var svg = d3.select('body')
+var svg = d3.select('#container')
   .append('svg')
-  .attr('oncontextmenu', 'return false;')
-  .attr('width', width)
-  .attr('height', height);
+  .attr('oncontextmenu', 'return false;');
 
 // set up initial nodes and links
 //  - nodes are known by 'id', not by index in array.
@@ -28,10 +22,9 @@ var svg = d3.select('body')
 var force = d3.layout.force()
     .nodes(nodes)
     .links(links)
-    .size([width, height])
     .linkDistance(150)
     .charge(-500)
-    .on('tick', tick)
+    .on('tick', tick);
 
 // define arrow markers for graph links
 svg.append('svg:defs').append('svg:marker')
@@ -379,4 +372,14 @@ svg.on('mousedown', mousedown)
 d3.select(window)
   .on('keydown', keydown)
   .on('keyup', keyup);
-restart();
+
+function resize() {
+  var width = document.getElementById("container").clientWidth;
+  var height = window.innerHeight - 100;
+  svg.attr('width', width)
+    .attr('height', height);
+  force.size([width, height]);
+  restart();
+}
+
+resize();
