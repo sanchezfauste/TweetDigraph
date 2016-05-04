@@ -31,10 +31,10 @@ def show(request, pk):
 		raise Http404("This Conversation does not exist")
 	return render(request, 'conversation.html',
 				  {'root_tweet':root_tweet,
-				  'replies':get_replies(root_tweet)})
+				  'replies':get_replies(root_tweet),
+				   'user':request.user})
 
 def graph(request, pk):
-	from django.core import serializers
 	try:
 		root_tweet = Tweet.objects.get(pk=pk)
 	except:
@@ -46,7 +46,8 @@ def graph(request, pk):
 		conversation.append(tweet)
 		stack += Tweet.objects.all().filter(in_reply_to_status_id=tweet.id)
 	return render(request, 'conversation_digraph.html',
-				  {'conversation':conversation})
+				  {'conversation':conversation,
+				   'user':request.user})
 
 def download(request, pk):
 	conversation = Conversation(pk, Twitter().api, save_on_load=True)
@@ -84,4 +85,5 @@ def get_replies(root_tweet):
 def show_conversation_list(request):
 	return render(request, 'conversation_list.html',
 				  {'conversations':UserConversation.objects.all(),
-				   'nvar':"conversation_list"})
+				   'nvar':"conversation_list",
+				   'user':request.user})
