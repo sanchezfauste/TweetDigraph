@@ -28,6 +28,8 @@
                                         {# <h5 class="time">{{ comment.0.created_at }}</h5> #}
                                     </div>
                                     <p>{{ conversation.root_tweet.text }}</p>
+                                    <a href="/conversation/{{ conversation.root_tweet.id }}/show" role="button" class="btn btn-default">Show</a>
+                                    <a href="/conversation/{{ conversation.root_tweet.id }}/graph" role="button" class="btn btn-default">Show graph</a>
                                 </div>
                             </div>
                     {% endfor %}

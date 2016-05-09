@@ -37,13 +37,14 @@
                     <p></p><form action="/conversation/{{ root_tweet.id }}/sentiment/edit" method="post" class="form-inline">
                         {% csrf_token %}
                         <input type="hidden" name="conversation_id" value="{{ root_tweet.id }}"/>
-                        <select id="sentiment_{{ root_tweet.id }}" name="sentiment" class="form-control input-sm selectWidth"
+                        <select id="sentiment_{{ root_tweet.id }}" name="sentiment" class="form-control selectWidth"
                                 onClick="changeSentiment('sentiment_{{ root_tweet.id }}', 'comment_{{ root_tweet.id }}')">
                             <option value="negative" {% if root_tweet.sentiment < 0 %} selected {% endif %}>En contra</option>
                             <option value="neutral" {% if root_tweet.sentiment == 0 %} selected {% endif %}>Neutral</option>
                             <option value="positive" {% if root_tweet.sentiment > 0 %} selected {% endif %}>A favor</option>
                         </select>
-                        <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <a href="/conversation/{{ root_tweet.id }}/graph" role="button" class="btn btn-default">Show graph</a>
                     </form>
                 </div>
             </div>
@@ -74,13 +75,13 @@
                                     <form action="/conversation/{{ comment.0.id }}/sentiment/edit" method="post" class="form-inline">
                                         {% csrf_token %}
                                         <input type="hidden" name="conversation_id" value="{{ root_tweet.id }}"/>
-                                        <select id="sentiment_{{ comment.0.id }}" name="sentiment" class="form-control input-sm selectWidth"
+                                        <select id="sentiment_{{ comment.0.id }}" name="sentiment" class="form-control selectWidth"
                                                 onClick="changeSentiment('sentiment_{{ comment.0.id }}', 'comment_{{ comment.0.id }}')">
                                             <option value="negative" {% if comment.0.sentiment < 0 %} selected {% endif %}>En contra</option>
                                             <option value="neutral" {% if comment.0.sentiment == 0 %} selected {% endif %}>Neutral</option>
                                             <option value="positive" {% if comment.0.sentiment > 0 %} selected {% endif %}>A favor</option>
                                         </select>
-                                        <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
+                                        <button type="submit" class="btn btn-primary">Guardar</button>
                                     </form>
                                 </div>
                             </div>
