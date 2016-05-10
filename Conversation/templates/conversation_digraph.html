@@ -44,7 +44,7 @@
         var rtcount_bsize = (max_rtcount - min_rtcount + 1) / colors.length,
             favcount_bsize = (max_favcount - min_favcount + 1) / colors.length;
         {% for tweet in conversation %}
-            if ("{{ tweet.in_reply_to_status_id }}" != "None") {
+            if (nodes[tweets[{{ tweet.in_reply_to_status_id}}]] && "{{ tweet.in_reply_to_status_id }}" != "None") {
                 links.push({source: nodes[tweets[{{ tweet.id }}]],
                             target: nodes[tweets[{{ tweet.in_reply_to_status_id}}]],
                             left: false, right: true})
