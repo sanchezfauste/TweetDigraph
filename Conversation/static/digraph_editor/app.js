@@ -133,6 +133,7 @@ function restart() {
   // update existing nodes (reflexive & selected visual states)
   circle.selectAll('circle')
     .style('fill', function(d) { return (d === selected_node) ? d3.rgb(get_color(d)).brighter().toString() : get_color(d); })
+    .style('stroke', function(d) { return d3.rgb(get_color(d)).darker().toString(); })
     .classed('reflexive', function(d) { return d.reflexive; });
 
   // add new nodes
@@ -344,13 +345,21 @@ function keydown() {
 }
 
 function get_color(node) {
+  if (color_by == "sentiment") {
     if (node.sentiment < 0) {
-        return "#d62728";
-    } else if (node.sentiment == 0) {
-        return "#7f7f7f";
+      return negative_color;
+    } else if (node.sentiment > 0) {
+      return positive_color;
     } else {
-        return "#2ca02c";
+      return neutral_color;
     }
+  }
+  if (color_by == "retweet_count") {
+    return colors[((node.retweet_count - min_rtcount) / rtcount_bsize) >> 0];
+  }
+  if (color_by == "favourites_count") {
+    return colors[((node.favourites_count - min_favcount) / favcount_bsize) >> 0];
+  }
 }
 
 function keyup() {
@@ -374,8 +383,9 @@ d3.select(window)
   .on('keyup', keyup);
 
 function resize() {
-  var width = document.getElementById("container").clientWidth;
-  var height = window.innerHeight - 100;
+  var width = document.getElementById("container").clientWidth - 30;
+  var height = window.innerHeight - document.getElementById("nav").clientHeight - 50
+      - document.getElementById("legend_selector").clientHeight;
   svg.attr('width', width)
     .attr('height', height);
   force.size([width, height]);

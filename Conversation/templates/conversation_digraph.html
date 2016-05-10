@@ -1,16 +1,48 @@
 {% extends "basepage.html" %}
 {% block title %}Conversation {{ conversation.id }}{% endblock %}
 {% block content %}
+    <div class="panel panel-default" id="legend_selector">
+        <div class="panel-body">
+            <select id="color_by" name="color_by" class="form-control selectWidth" onClick="changeColorBy()">
+                <option value="sentiment" selected>Sentiment</option>
+                <option value="retweet_count">Retweet count</option>
+                <option value="favourites_count">Favourites count</option>
+            </select>
+            <div id="legend"></div>
+        </div>
+    </div>
+
     <script type="text/javascript">
+        var colors = ['#FF0000', '#FF4000', '#FF8000', '#FFBF00', '#FFFF00', '#BFFF00', '#80FF00', '#40FF00', '#00FF00',
+          '#00FF40', '#00FF80', '#00FFBF', '#00FFFF', '#00BFFF', '#0080FF', '#0040FF', '#0000FF', '#4000FF', '#8000FF',
+          '#BF00FF', '#FF00FF', '#FF00BF', '#FF0080', '#FF0040', '#848484'];
+        var negative_color = "#d62728",
+            neutral_color = "#7f7f7f",
+            positive_color = "#2ca02c";
         var tweets = {};
         var nodes = [],
           lastNodeId = 0,
           links = [];
+        var color_by = "sentiment";
+        var max_rtcount = 0,
+            min_rtcount = {{ conversation.0.retweet_count }},
+            max_favcount = 0,
+            min_favcount = {{ conversation.0.favourites_count }};
         {% for tweet in conversation %}
-            nodes.push({id: lastNodeId, reflexive: false, sentiment: {{ tweet.sentiment }}});
+            nodes.push({id: lastNodeId,
+                reflexive: false,
+                sentiment: {{ tweet.sentiment }},
+                retweet_count: {{ tweet.retweet_count }},
+                favourites_count: {{ tweet.favourites_count }} });
             tweets[{{ tweet.id }}] = lastNodeId;
             lastNodeId += 1;
+            if (min_rtcount > {{ tweet.retweet_count }}) min_rtcount = {{ tweet.retweet_count }};
+            if (max_rtcount < {{ tweet.retweet_count }}) max_rtcount = {{ tweet.retweet_count }};
+            if (min_favcount > {{ tweet.favourites_count }}) min_favcount = {{ tweet.favourites_count }};
+            if (max_favcount < {{ tweet.favourites_count }}) max_favcount = {{ tweet.favourites_count }};
         {% endfor %}
+        var rtcount_bsize = (max_rtcount - min_rtcount + 1) / colors.length,
+            favcount_bsize = (max_favcount - min_favcount + 1) / colors.length;
         {% for tweet in conversation %}
             if ("{{ tweet.in_reply_to_status_id }}" != "None") {
                 links.push({source: nodes[tweets[{{ tweet.id }}]],
@@ -18,6 +50,28 @@
                             left: false, right: true})
             }
         {% endfor %}
+        var sentiment_legend = "<span style='color: " + negative_color + ";'>Negative</span> " +
+            "<span style='color: " + neutral_color + ";'>Neutral</span> " +
+            "<span style='color: " + positive_color + ";'>Positive</span>";
+        var favcount_legend = "", rtcount_legend = "", i;
+        for (i = 0; i < colors.length; i++) {
+            favcount_legend += "<span style='color: " + colors[i] + ";'>" + ((min_favcount + favcount_bsize * i) >> 0) + "</span> ";
+            rtcount_legend += "<span style='color: " + colors[i] + ";'>" + ((min_rtcount + rtcount_bsize * i) >> 0) + "</span> ";
+        }
+        function changeColorBy() {
+            color_by = document.getElementById('color_by').value;
+            if (color_by == "sentiment") {
+                document.getElementById("legend").innerHTML = "<p></p>" + sentiment_legend;
+            } else if (color_by == "favourites_count") {
+                document.getElementById("legend").innerHTML = "<p></p>" + favcount_legend;
+            } else if (color_by == "retweet_count") {
+                document.getElementById("legend").innerHTML = "<p></p>" + rtcount_legend;
+            } else {
+                document.getElementById("legend").innerHTML = "";
+            }
+            resize();
+        }
+        changeColorBy();
     </script>
     {% load staticfiles %}
     <link rel="stylesheet" href="{% static "digraph_editor/app.css" %}" />
