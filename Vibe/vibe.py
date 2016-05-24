@@ -28,8 +28,8 @@ class Vibe :
       afinn_filename = "Vibe/AFINN-111.txt"
     elif language == 'es' :
       filename1 = "Vibe/pos-adjectives-es.txt"
-      filename2 = "Vibe/empty.txt"
-      afinn_filename = "Vibe/empty.txt"
+      filename2 = "Vibe/neg-adjectives-es.txt"
+      afinn_filename = "Vibe/AFINN-111-es.txt"
     else :
       filename1 = "Vibe/empty.txt"
       filename2 = "Vibe/empty.txt"
