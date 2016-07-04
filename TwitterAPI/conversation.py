@@ -100,7 +100,7 @@ class ConversationNode:
 			replies = []
 			for conversation in conversations:
 				first_tweet = conversation.find('li', {'class':'js-stream-item ' \
-						+ 'stream-item stream-item expanding-stream-item\n'})
+						+ 'stream-item stream-item\n'})
 				replies.append(first_tweet.get('data-item-id'))
 			return replies
 		else:
