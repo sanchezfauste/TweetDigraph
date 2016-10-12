@@ -48,3 +48,6 @@ To stop the application press `CTRL-C` and run the command `deactivate` to deact
 | GET    | /conversation/{id}/import | Import the Twitter conversation with the specified id       |
 | GET    | /conversation/{id}/show   | Show the conversation with the specified id                 |
 | GET    | /conversation/{id}/graph  | Show the conversation with the specified id on graph format |
+
+## Administration panel
+You can access the administrator panel on `/admin`.
