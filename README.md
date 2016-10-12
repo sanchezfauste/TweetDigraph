@@ -40,3 +40,11 @@ python manage.py runserver 0.0.0.0:8080
 ```
 
 To stop the application press `CTRL-C` and run the command `deactivate` to deactivate the Python virtual environment.
+
+## API RESTful
+| Method | Resource                  | Description                                                 |
+|--------|---------------------------|-------------------------------------------------------------|
+| GET    | /conversation             | Show the list of imported conversations                     |
+| GET    | /conversation/{id}/import | Import the Twitter conversation with the specified id       |
+| GET    | /conversation/{id}/show   | Show the conversation with the specified id                 |
+| GET    | /conversation/{id}/graph  | Show the conversation with the specified id on graph format |
