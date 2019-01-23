@@ -1,4 +1,4 @@
-Django==1.9.4
+Django==1.11.18
 argparse==1.2.1
 beautifulsoup4==4.4.1
 django-bootstrap3==7.0.0
